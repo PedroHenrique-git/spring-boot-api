@@ -1,16 +1,22 @@
 package br.todolist.todoapp.model;
 
-public class Todo {
+import jakarta.validation.constraints.NotNull;
+
+public class Task {
     private int id;
-    private String task;
+
+    @NotNull
+    private String name;
+
+    @NotNull
     private boolean done;
 
-    public Todo() {}
+    public Task() {}
 
-    public Todo(int id, String task, boolean done) {
+    public Task(int id, String name, boolean done) {
         this.id = id;
         this.done = done;
-        this.task = task;
+        this.name = name;
     }
     
     public void setId(int id) {
@@ -21,12 +27,12 @@ public class Todo {
         return id;
     }
 
-    public void setTask(String task) {
-        this.task = task;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getTask() {
-        return this.task;
+    public String getName() {
+        return this.name;
     }
 
     public void setDone(boolean done) {
@@ -39,6 +45,6 @@ public class Todo {
 
     @Override
     public String toString() {
-        return String.format("Todo{ id: %d, task: %s, done: %b }", id, task, done);
+        return String.format("Todo{ id: %d, name: %s, done: %b }", id, name, done);
     }
 }
