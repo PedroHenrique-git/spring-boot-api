@@ -4,9 +4,6 @@ import java.util.List;
 
 import br.todolist.todoapp.model.Task;
 
-/**
- * TaskRepository
- */
 public interface ITaskRepository {
     List<Task> getAll();
     List<Task> get(int id);

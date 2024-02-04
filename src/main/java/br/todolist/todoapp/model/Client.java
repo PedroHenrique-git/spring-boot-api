@@ -1,9 +1,15 @@
 package br.todolist.todoapp.model;
 
+import java.util.Collection;
+import java.util.HashSet;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-public class Client {
+public class Client implements UserDetails {
     private int id;
 
     @NotNull
@@ -43,5 +49,15 @@ public class Client {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return new HashSet<>();
+    }
+
+    @Override
+    public String getUsername() {
+        return this.getEmail();
     }
 }

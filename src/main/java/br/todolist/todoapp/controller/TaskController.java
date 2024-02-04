@@ -40,7 +40,7 @@ public class TaskController {
     }
 
     @GetMapping("/tasks/{id}")
-    public ResponseEntity<List<Task>> getTask(@PathVariable int id) {
+    public ResponseEntity<List<Task>> getTask(@PathVariable(required = true) int id) {
         List<Task> task = repository.get(id);
 
         if(task.isEmpty()) {
@@ -60,13 +60,13 @@ public class TaskController {
 
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @PutMapping("/tasks/{id}")
-    public void update(@PathVariable int id, @RequestBody @Valid Task task) {
+    public void update(@PathVariable(required = true) int id, @RequestBody @Valid Task task) {
         repository.update(id, task);
     }
 
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @DeleteMapping("/tasks/{id}")
-    public void delete(@PathVariable int id) {
+    public void delete(@PathVariable(required = true) int id) {
         repository.delete(id);
     }
 
@@ -84,6 +84,8 @@ public class TaskController {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handler(Exception error) {
+        logger.info("TaskController.java: " + error.toString());
+
         Map<String, String> response = new HashMap<>();
 
         response.put("message", "Internal Server Error");

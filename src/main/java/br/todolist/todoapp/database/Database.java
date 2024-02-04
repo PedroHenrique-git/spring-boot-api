@@ -2,13 +2,13 @@ package br.todolist.todoapp.database;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;
+import org.springframework.stereotype.Component;
 
 import br.todolist.todoapp.Env;
 
-@Configuration
+@Component
 public class Database {
     @Autowired private Env env;
     

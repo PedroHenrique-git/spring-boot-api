@@ -1,10 +1,10 @@
 package br.todolist.todoapp;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Component;
 
-@Component
+@Configuration
 public class Env {
     @Autowired private Environment environment;
     
@@ -22,5 +22,9 @@ public class Env {
 
     public String getDBUSERNAME() {
         return environment.getProperty("DB_USERNAME");
+    }
+
+    public String getJWTSECRET() {
+        return environment.getProperty("JWT_SECRET");
     }
 }

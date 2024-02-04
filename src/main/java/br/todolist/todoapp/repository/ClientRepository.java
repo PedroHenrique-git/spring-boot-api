@@ -1,6 +1,7 @@
 package br.todolist.todoapp.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -14,7 +15,8 @@ import br.todolist.todoapp.model.ClientMapper;
 public class ClientRepository implements IClientRepository  {
     @Autowired Database database;
 
-    private static final String SQL_GET_CLIENT = "SELECT id, email FROM client";
+    private static final String SQL_GET_CLIENT = "SELECT id, email FROM client WHERE id = ?";
+    private static final String SQL_GET_CLIENT_BY_EMAIL_AND_PASSWORD = "SELECT id, email, password FROM client WHERE email = ?";
     private static final String SQL_ADD_CLIENT = "INSERT INTO client(email, password) VALUES (?, ?)";
     private static final String SQL_UPDATE_CLIENT = "UPDATE client SET email = ?, password = ? where id = ?";
     private static final String SQL_DELETE_CLIENT = "DELETE FROM client WHERE id = ?";
@@ -37,5 +39,12 @@ public class ClientRepository implements IClientRepository  {
     @Override
     public void update(int id, Client client) {
         database.getJdbc().update(SQL_UPDATE_CLIENT, client.getEmail(), client.getPassword());
+    }
+
+    @Override
+    public Client getByEmail(String email) {
+        List<Client> result = database.getJdbc().query(SQL_GET_CLIENT_BY_EMAIL_AND_PASSWORD, new ClientMapper(), email);
+
+        return result.stream().findFirst().orElse(null);
     }
 }
