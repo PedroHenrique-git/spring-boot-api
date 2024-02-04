@@ -6,8 +6,14 @@ import br.todolist.todoapp.model.Task;
 
 public interface ITaskRepository {
     List<Task> getAll();
+
+    List<Task> getClientTasks(int id);
+
     List<Task> get(int id);
+
     void save(Task todo);
+
     void delete(int id);
+
     void update(int id, Task todo);
 }

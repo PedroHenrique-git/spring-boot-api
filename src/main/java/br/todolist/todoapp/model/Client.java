@@ -14,12 +14,13 @@ public class Client implements UserDetails {
 
     @NotNull
     private String email;
-    
+
     @NotNull
     @Size(min = 8, max = 128)
     private String password;
 
-    public Client () {}
+    public Client() {
+    }
 
     public Client(int id, String email, String password) {
         this.id = id;

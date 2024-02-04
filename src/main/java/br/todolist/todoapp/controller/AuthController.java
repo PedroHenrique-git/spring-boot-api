@@ -14,7 +14,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.server.Session.Cookie;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +23,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,7 +45,16 @@ public class AuthController {
     @Autowired
     JWTUtils jwtUtils;
 
-    Logger logger = LoggerFactory.getLogger(ClientController.class);
+    Logger logger = LoggerFactory.getLogger(AuthController.class);
+
+    @GetMapping("/info")
+    public ResponseEntity<Map<String, String>> getUserInfo(@CookieValue("session") String session) {
+        if (session == null) {
+            return new ResponseEntity<>(Map.of(), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(jwtUtils.decodePayloadToMap(session), HttpStatus.OK);
+    }
 
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @PostMapping("/register")

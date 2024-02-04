@@ -12,13 +12,15 @@ import br.todolist.todoapp.model.TaskMapper;
 
 @Repository
 public class TaskRepository implements ITaskRepository {
-    @Autowired Database database;
+    @Autowired
+    Database database;
 
-    private static final String SQL_GET_TODOS = "SELECT id, name, done FROM task";
-    private static final String SQL_GET_TODO = "SELECT id, name, done FROM task WHERE id = ?";
-    private static final String SQL_ADD_TODO = "INSERT INTO task(name, done) VALUES(?, ?)";
+    private static final String SQL_GET_TODOS = "SELECT id, name, done, client_id FROM task";
+    private static final String SQL_GET_TODO = "SELECT id, name, done, client_id FROM task WHERE id = ?";
+    private static final String SQL_ADD_TODO = "INSERT INTO task(name, done, client_id) VALUES(?, ?, ?)";
     private static final String SQL_DELETE_TODO = "DELETE FROM task WHERE id = ?";
-    private static final String SQL_UPDATE_TODO = "UPDATE task SET name = ?, done = ? WHERE id = ?";
+    private static final String SQL_UPDATE_TODO = "UPDATE task SET name = ?, done = ?, client_id = ? WHERE id = ?";
+    private static final String SQL_GET_TASK_BY_CLIENT_ID = "SELECT t.id as id, t.name as name, t.done as done, t.client_id as client_id FROM task t INNER JOIN client c ON t.client_id = c.id WHERE c.id = ?";
 
     @Override
     public List<Task> getAll() {
@@ -31,8 +33,13 @@ public class TaskRepository implements ITaskRepository {
     }
 
     @Override
-    public void save(Task todo) {
-        database.getJdbc().update(SQL_ADD_TODO, todo.getName(), todo.getDone());
+    public void save(Task task) {
+        database.getJdbc().update(SQL_ADD_TODO, task.getName(), task.getDone(), task.getClientId());
+    }
+
+    @Override
+    public List<Task> getClientTasks(int id) {
+        return database.getJdbc().query(SQL_GET_TASK_BY_CLIENT_ID, new TaskMapper(), id);
     }
 
     @Override
@@ -41,7 +48,7 @@ public class TaskRepository implements ITaskRepository {
     }
 
     @Override
-    public void update(int id, Task todo) {
-        database.getJdbc().update(SQL_UPDATE_TODO, todo.getName(), todo.getDone(), id);
+    public void update(int id, Task task) {
+        database.getJdbc().update(SQL_UPDATE_TODO, task.getName(), task.getDone(), task.getClientId(), id);
     }
 }

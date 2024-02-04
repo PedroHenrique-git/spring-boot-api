@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -56,8 +55,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             return;
         }
 
-        var tokenPayload = jwtUtils.decodeToken(sessionCookie.getValue());
-        var user = jwtUtils.decodePayloadToMap(tokenPayload);
+        var user = jwtUtils.decodePayloadToMap(sessionCookie.getValue());
 
         var authentication = new UsernamePasswordAuthenticationToken(user.get("email"), null, null);
         SecurityContextHolder.getContext().setAuthentication(authentication);

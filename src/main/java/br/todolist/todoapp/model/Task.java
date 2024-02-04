@@ -11,20 +11,32 @@ public class Task {
     @NotNull
     private boolean done;
 
-    public Task() {}
+    @NotNull
+    private int clientId;
+
+    public Task() {
+    }
 
     public Task(int id, String name, boolean done) {
         this.id = id;
         this.done = done;
         this.name = name;
     }
-    
+
+    public void setClientId(int clientId) {
+        this.clientId = clientId;
+    }
+
     public void setId(int id) {
         this.id = id;
     }
 
     public int getId() {
         return id;
+    }
+
+    public int getClientId() {
+        return clientId;
     }
 
     public void setName(String name) {

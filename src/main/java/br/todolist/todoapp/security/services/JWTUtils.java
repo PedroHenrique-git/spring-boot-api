@@ -58,13 +58,19 @@ public class JWTUtils {
         }
     }
 
-    public Map<String, String> decodePayloadToMap(String base64) throws JsonProcessingException, JsonMappingException {
-        ObjectMapper mapper = new ObjectMapper();
-        String json = new String(Base64.getDecoder().decode(base64));
+    public Map<String, String> decodePayloadToMap(String sessionCookie) {
+        try {
+            var tokenPayload = decodeToken(sessionCookie);
 
-        JsonNode jsonNode = mapper.readTree(json);
+            ObjectMapper mapper = new ObjectMapper();
+            String json = new String(Base64.getDecoder().decode(tokenPayload));
 
-        return Map.of("email", jsonNode.get("email").asText(), "id", jsonNode.get("id").asText());
+            JsonNode jsonNode = mapper.readTree(json);
+
+            return Map.of("email", jsonNode.get("email").asText(), "id", jsonNode.get("id").asText());
+        } catch (Exception error) {
+            return Map.of();
+        }
     }
 
     public Instant genExpirationDate() {
