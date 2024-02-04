@@ -16,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -56,10 +57,18 @@ public class TaskController {
         return new ResponseEntity<>(task, HttpStatus.OK);
     }
 
-    @ResponseStatus(value = HttpStatus.NO_CONTENT)
     @PostMapping("/tasks")
-    public void save(@RequestBody @Valid Task task) {
+    public ResponseEntity<Void> save(@RequestBody @Valid Task task, @CookieValue("session") String session) {
+        var user = jwtUtils.decodePayloadToMap(session);
+        var userId = Integer.parseInt(user.get("id"));
+
+        if (task.getClientId() != userId) {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+
         repository.save(task);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/tasks/{id}")
